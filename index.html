@@ -17,33 +17,89 @@
     }
 
     /* ================================================
-       DEVIL IMAGE — top-left to bottom-right, 25% size
+       DEVIL IMAGES — 50 drop from top, bounce at center
        ================================================ */
-    .devil-wrap {
-      position: absolute;
-      width: 25vmin;
-      height: 25vmin;
+    .devil {
+      position: fixed;
+      width: 56px;
+      height: 56px;
+      top: -80px;
       z-index: 10;
-      animation: emerge 3.8s cubic-bezier(0.16, 0.6, 0.4, 1) forwards,
-                 fade-devil 0.6s ease-out 3.8s forwards;
-      filter: drop-shadow(0 0 40px rgba(180, 20, 0, 0.35));
+      filter: drop-shadow(0 0 8px rgba(180, 20, 0, 0.55));
+      animation: devil-drop 2.4s ease-in forwards;
     }
 
-    .devil-wrap img {
+    .devil img {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
 
-    @keyframes emerge {
-      0%   { top: -28%; left: -28%; opacity: 0; filter: drop-shadow(0 0 60px rgba(180,20,0,0.6)) brightness(1.8); }
-      12%  { opacity: 1; }
-      100% { top: 37.5vh; left: 37.5vw; opacity: 1; filter: drop-shadow(0 0 40px rgba(180,20,0,0.35)) brightness(1); }
+    @keyframes devil-drop {
+      0%   { transform: translateY(0);                  opacity: 1; animation-timing-function: ease-in; }
+      52%  { transform: translateY(calc(50vh + 60px));  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+      70%  { transform: translateY(calc(28vh + 60px));  animation-timing-function: ease-in; }
+      84%  { transform: translateY(calc(48vh + 60px));  animation-timing-function: linear; }
+      91%  { transform: translateY(calc(48vh + 60px));  opacity: 1; }
+      100% { transform: translateY(calc(48vh + 60px));  opacity: 0; }
     }
 
-    @keyframes fade-devil {
-      0%   { opacity: 1; }
-      100% { opacity: 0; visibility: hidden; }
+    /* ================================================
+       ENDSCREEN — large icon + button (30s after title)
+       ================================================ */
+    .endscreen {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      z-index: 25;
+      opacity: 0;
+      animation: endscreen-in 1.2s ease-out 15.5s forwards;
+    }
+
+    @keyframes endscreen-in {
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .endscreen img {
+      width: min(280px, 45vw);
+      height: min(280px, 45vw);
+      object-fit: contain;
+      filter: drop-shadow(0 0 30px rgba(180, 20, 0, 0.6)) drop-shadow(0 0 60px rgba(120, 0, 0, 0.4));
+    }
+
+    .todo-btn {
+      display: inline-block;
+      padding: 16px 40px;
+      background: linear-gradient(180deg, #2a0000 0%, #0d0000 100%);
+      color: #ff3300;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: bold;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      border: 2px solid #8b0000;
+      box-shadow:
+        0 0 12px rgba(180, 0, 0, 0.5),
+        0 0 30px rgba(120, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 60, 0, 0.15);
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .todo-btn:hover {
+      background: linear-gradient(180deg, #4a0000 0%, #1a0000 100%);
+      color: #ff6633;
+      border-color: #cc0000;
+      box-shadow:
+        0 0 20px rgba(220, 0, 0, 0.7),
+        0 0 50px rgba(180, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 80, 0, 0.2);
     }
 
     /* ================================================
@@ -68,8 +124,9 @@
       white-space: nowrap;
       opacity: 0;
       z-index: 20;
-      animation: flash-in 1s ease-out 4.1s forwards,
-                 glow-pulse 2s ease-in-out 5.1s infinite alternate;
+      animation: flash-in 1s ease-out 4.4s forwards,
+                 glow-pulse 2s ease-in-out 5.4s infinite alternate,
+                 fade-out 1s ease-in 14.4s forwards;
     }
 
     @keyframes flash-in {
@@ -90,6 +147,11 @@
         text-shadow: 0 0 20px #ff4400, 0 0 40px #ff2200, 0 0 80px #cc0000, 0 0 120px #880000, 2px 2px 4px #000;
         letter-spacing: 0.08em;
       }
+    }
+
+    @keyframes fade-out {
+      0%   { opacity: 1; }
+      100% { opacity: 0; }
     }
 
     @keyframes glow-pulse {
@@ -113,7 +175,7 @@
       opacity: 0;
       z-index: 15;
       pointer-events: none;
-      animation: fire-flash 0.7s ease-out 4s forwards;
+      animation: fire-flash 0.7s ease-out 4.1s forwards;
       background: radial-gradient(ellipse at 50% 50%,
         rgba(255,100,30,0.9) 0%,
         rgba(255,50,0,0.6) 30%,
@@ -138,7 +200,7 @@
       pointer-events: none;
       z-index: 5;
       opacity: 0;
-      animation: embers-in 1.5s ease-out 4.5s forwards;
+      animation: embers-in 1.5s ease-out 4.8s forwards;
     }
     @keyframes embers-in { to { opacity: 1; } }
 
@@ -198,9 +260,13 @@
 </head>
 <body>
 
-  <!-- Devil PNG -->
-  <div class="devil-wrap">
-    <img src="86c922fe0578dc5e86e3261c7d8980bb-2365657242.png" alt="Diablo">
+  <!-- 50 falling devils (spawned by JS) -->
+  <div id="devils-container"></div>
+
+  <!-- Endscreen: large icon + button -->
+  <div class="endscreen">
+    <img src="favicon-rounded.png" alt="Diablo">
+    <a class="todo-btn" href="https://todo.mydiablo.dev">To Do App</a>
   </div>
 
   <!-- Flash overlay -->
@@ -227,6 +293,21 @@
     <div class="ember"></div>
     <div class="ember"></div>
   </div>
+
+  <script>
+    const container = document.getElementById('devils-container');
+    for (let i = 0; i < 50; i++) {
+      const div = document.createElement('div');
+      div.className = 'devil';
+      div.style.left = (Math.random() * 88 + 2) + 'vw';
+      div.style.animationDelay = (Math.random() * 1.8).toFixed(3) + 's';
+      const img = document.createElement('img');
+      img.src = 'favicon-rounded.png';
+      img.alt = 'Diablo';
+      div.appendChild(img);
+      container.appendChild(div);
+    }
+  </script>
 
 </body>
 </html>
